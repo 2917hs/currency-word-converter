@@ -1,7 +1,7 @@
 namespace CurrencyToWordConverter.Core;
 
-public readonly record struct Money(int Cent, long Amount)
+public readonly record struct Money(int Decimal, long WholeNumber)
 {
-    public const int MaxCents = 99;
-    public const int MaxAmount = 999_999_999;
+    public const int MaxDecimal = 99;
+    public const long MaxWholeNumber = 999_999_999;
 }

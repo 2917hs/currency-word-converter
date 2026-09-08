@@ -1,6 +1,6 @@
 ﻿using CurrencyToWordConverter.Core.Enumerations;
 
-namespace CurrencyToWordConverter.Core.Interfaces;
+namespace CurrencyToWordConverter.Core.BusinessRules.Interfaces;
 
 public interface IAmountToWordsConverter
 {

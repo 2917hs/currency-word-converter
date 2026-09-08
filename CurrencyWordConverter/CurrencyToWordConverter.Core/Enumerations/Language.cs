@@ -10,7 +10,7 @@ public static class LanguageCodes
 {
     private const string English = "en";
 
-    private const string German =    "de";
+    private const string German = "de";
 
     public static readonly IReadOnlyDictionary<string, Language> CodeToLanguage =
         new Dictionary<string, Language>(StringComparer.OrdinalIgnoreCase)
