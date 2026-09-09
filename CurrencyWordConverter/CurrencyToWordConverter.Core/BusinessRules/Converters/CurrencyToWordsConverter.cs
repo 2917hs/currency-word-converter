@@ -17,7 +17,7 @@ public class CurrencyToWordsConverter : ICurrencyToWordsConverter
         if (!_converters.TryGetValue(language, out var converter))
             throw new NotSupportedException($"No number-to-words converter is registered for '{language}'.");
 
-        //var amount = CurrencyAmountParser.Parse(rawAmount);
-        return converter.ConvertAmount(new Money());
+        var amount = CurrencyAmountParser.Parse(rawAmount);
+        return converter.ConvertAmount(amount);
     }
 }
