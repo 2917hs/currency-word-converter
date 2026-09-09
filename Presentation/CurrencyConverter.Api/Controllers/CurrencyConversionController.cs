@@ -7,15 +7,15 @@ using CurrencyConverter.Api.DTOs;
 namespace CurrencyConverter.Api.Controllers;
 
 [ApiController]
-[Route("api")]
+[Route("api/v1")]
 public sealed class CurrencyConversionController(ICurrencyToWordsConverter converter) : ControllerBase
 {
     [HttpGet("languages")]
     [ProducesResponseType(typeof(IEnumerable<LanguageOption>), StatusCodes.Status200OK)]
     public ActionResult<IEnumerable<LanguageOption>> GetSupportedLanguages()
     {
-        var options = LanguageCodes.LanguageToCode
-            .Select(pair => new LanguageOption(pair.Value, LanguageCodes.LanguageToDisplayName[pair.Key]));
+        var options = LanguageCodes.All
+            .Select(pair => new LanguageOption(pair.Value.Code, pair.Value.DisplayName));
 
         return Ok(options);
     }
@@ -27,21 +27,13 @@ public sealed class CurrencyConversionController(ICurrencyToWordsConverter conve
     {
         if (!LanguageCodes.TryParse(request.Language, out var language))
         {
-            var supported = string.Join(", ", LanguageCodes.CodeToLanguage.Keys);
-            ModelState.AddModelError(nameof(request.Language),
-                $"Unsupported language '{request.Language}'. Supported languages: {supported}.");
-            return ValidationProblem(ModelState);
+            var supported = string.Join(", ", LanguageCodes.SupportedCodes);
+            throw new ValidationException(
+                $"Unsupported language '{request.Language}'. Supported languages: {supported}.",
+                nameof(request.Language));
         }
 
-        try
-        {
-            var words = converter.ConvertAmount(request.Amount, language);
-            return Ok(new ConvertCurrencyResponse(request.Amount, request.Language, words));
-        }
-        catch (CurrencyFormatException ex)
-        {
-            ModelState.AddModelError(nameof(request.Amount), ex.Message);
-            return ValidationProblem(ModelState);
-        }
+        var words = converter.ConvertAmount(request.Amount, language);
+        return Ok(new ConvertCurrencyResponse(request.Amount, request.Language, words));
     }
 }

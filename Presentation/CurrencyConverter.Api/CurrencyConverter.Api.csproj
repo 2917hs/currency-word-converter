@@ -15,4 +15,8 @@
         <ProjectReference Include="..\..\CurrencyConverter.Core\CurrencyConverter.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <InternalsVisibleTo Include="CurrencyConverter.Api.Tests" />
+    </ItemGroup>
+
 </Project>

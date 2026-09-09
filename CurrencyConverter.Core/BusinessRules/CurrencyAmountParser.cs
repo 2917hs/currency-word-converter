@@ -7,7 +7,7 @@ public class CurrencyAmountParser
 {
     public static Money Parse(string? rawInput)
     {
-        if (string.IsNullOrWhiteSpace(rawInput)) throw new CurrencyFormatException("Amount must not be empty.");
+        if (string.IsNullOrWhiteSpace(rawInput)) throw new ValidationException("Amount must not be empty.");
 
         var trimmed = rawInput.Trim();
 
@@ -16,7 +16,7 @@ public class CurrencyAmountParser
         var centsPart = commaIndex >= 0 ? trimmed[(commaIndex + 1)..] : null;
 
         if (centsPart is not null && centsPart.IndexOf(',') >= 0)
-            throw new CurrencyFormatException("Amount must contain at most one ',' separator.");
+            throw new ValidationException("Amount must contain at most one ',' separator.");
 
         var dollars = ParseDollars(dollarsPart);
         var cents = ParseCents(centsPart);
@@ -28,17 +28,17 @@ public class CurrencyAmountParser
     {
         var digitsOnly = dollarsPart.Replace(" ", string.Empty).Replace("\u00A0", string.Empty);
 
-        if (digitsOnly.Length == 0) throw new CurrencyFormatException("Amount must include a whole-dollar value.");
+        if (digitsOnly.Length == 0) throw new ValidationException("Amount must include a whole-dollar value.");
 
         if (!IsAllAsciiDigits(digitsOnly))
-            throw new CurrencyFormatException(
+            throw new ValidationException(
                 $"'{dollarsPart}' is not a valid whole-dollar amount. Only digits and spaces are allowed.");
 
         if (!long.TryParse(digitsOnly, NumberStyles.None, CultureInfo.InvariantCulture, out var dollars))
-            throw new CurrencyFormatException($"'{dollarsPart}' is too large to convert.");
+            throw new ValidationException($"'{dollarsPart}' is too large to convert.");
 
         if (dollars > Money.MaxWholeNumber)
-            throw new CurrencyFormatException(
+            throw new ValidationException(
                 $"The maximum supported amount is {Money.MaxWholeNumber.ToString("N0", CultureInfo.InvariantCulture)} dollars.");
 
         return dollars;
@@ -49,7 +49,7 @@ public class CurrencyAmountParser
         if (centsPart is null) return 0;
 
         if (centsPart.Length is 0 or > 2 || !IsAllAsciiDigits(centsPart))
-            throw new CurrencyFormatException(
+            throw new ValidationException(
                 "Cents must be given as one or two digits after the ',' (e.g. '25,1' or '25,10').");
 
         return centsPart.Length == 1
