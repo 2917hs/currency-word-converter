@@ -16,7 +16,8 @@ Convert a dollar amount into words.
 
 ## Project structure
 
-- `CurrencyConverter.Core/` — conversion logic (parsing, number-to-words). No web dependencies.
+- `CurrencyConverter.Core/` — conversion logic. No web dependencies.
+- `CurrencyConverter.Core.Tests/`, `CurrencyConverter.Api.Tests/` — xUnit tests.
 - `Presentation/CurrencyConverter.Api/` — ASP.NET Core Web API.
 - `Presentation/currency-converter-client/` — React + TypeScript frontend (Vite).
 
@@ -27,48 +28,47 @@ Convert a dollar amount into words.
 
 ## Run
 
-**Backend** (from repo root):
-```bash
-dotnet run --project Presentation/CurrencyConverter.Api
-```
-→ `http://localhost:5295` (Swagger UI at `/swagger`)
+**Backend** (repo root): `dotnet run --project Presentation/CurrencyConverter.Api`
+→ `http://localhost:5295` (Swagger at `/swagger`, health at `/health`)
 
-**Frontend** (from `Presentation/currency-converter-client`):
-```bash
-npm install
-npm run dev
-```
+**Frontend** (`Presentation/currency-converter-client`): `npm install && npm run dev`
 → `http://localhost:5173`
 
-Both must run at once — the frontend calls the API directly.
+Run both at once — the frontend calls the API directly. CORS origin (backend `appsettings.Development.json`) and API URL (frontend `.env.development`) must match if you change ports.
+
+**Docker** (repo root): `docker compose up --build` → frontend on `:8081`, API on `:8080`.
 
 ## Test & validate
 
-Build:
 ```bash
-dotnet build CurrencyWordConverter.sln
+dotnet test CurrencyWordConverter.sln
+cd Presentation/currency-converter-client && npm run lint
 ```
 
-Try it via the UI, or call the API directly:
+Or call the API directly:
 ```bash
-curl -X POST http://localhost:5295/api/currency/convert \
-  -H "Content-Type: application/json" \
-  -d '{"amount":"25,1","language":"en"}'
+curl -X POST http://localhost:5295/api/v1/currency/convert \
+  -H "Content-Type: application/json" -d '{"amount":"25,1","language":"en"}'
 # {"amount":"25,1","language":"en","words":"twenty-five dollars and ten cents"}
 ```
 
-Invalid input (`abc`, `25,100`, over `999999999`, more than one `,`) returns HTTP 400 with a validation message — try these to confirm error handling works.
+Invalid input (`abc`, `25,100`, over `999999999`, more than one `,`) returns HTTP 400 with a validation message.
 
 ## API
 
-- `GET /api/languages` → `[{ code, displayName }]`
-- `POST /api/currency/convert` with `{ amount, language }` → `{ amount, language, words }`, or 400 on invalid input.
+- `GET /api/v1/languages` → `[{ code, displayName }]`
+- `POST /api/v1/currency/convert` with `{ amount, language }` → `{ amount, language, words }`, or 400 on invalid input
+- `GET /health` → 200 when up
+
+Frontend types (`src/api-types.ts`) are generated from the API, not hand-written: `npm run generate:api-types` (backend must be running).
 
 ## Notes
 
 - Conversion is entirely server-side; the frontend only renders the API's response.
-- `Money` validates its own bounds in its constructor — an invalid amount can't exist as a `Money` value.
-- Not yet done: automated tests, frontend styling, configurable CORS/API URL (currently hardcoded to localhost).
+- Errors go through one global exception handler, not per-endpoint try/catch.
+- Convert endpoint is rate-limited (30 req/min); Swagger is dev-only; HSTS on outside Development.
+- Dockerfiles are untested in this environment (no Docker available here) — verify before relying on them.
+- Not yet done: frontend styling.
 
 ## AI usage disclosure
 
