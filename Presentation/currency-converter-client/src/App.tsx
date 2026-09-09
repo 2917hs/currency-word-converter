@@ -1,23 +1,13 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import type { components } from './api-types'
+import { validateAmount } from './validateAmount'
 
-const API_BASE_URL = 'http://localhost:5295'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:5295'
 
-type LanguageOption = {
-  code: string
-  displayName: string
-}
-
-type ConvertCurrencyResponse = {
-  amount: string
-  language: string
-  words: string
-}
-
-type ValidationProblemDetails = {
-  title: string
-  errors: Record<string, string[]>
-}
+type LanguageOption = components['schemas']['LanguageOption']
+type ConvertCurrencyResponse = components['schemas']['ConvertCurrencyResponse']
+type ValidationProblemDetails = components['schemas']['ValidationProblemDetails']
 
 function App() {
   const [languages, setLanguages] = useState<LanguageOption[]>([])
@@ -28,7 +18,7 @@ function App() {
   const [validationError, setValidationError] = useState('')
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/languages`)
+    fetch(`${API_BASE_URL}/api/v1/languages`)
       .then((response) => response.json())
       .then((data: LanguageOption[]) => setLanguages(data))
       .catch(() => setError('Could not load languages from the server.'))
@@ -46,7 +36,7 @@ function App() {
     }
     setValidationError('')
 
-    const response = await fetch(`${API_BASE_URL}/api/currency/convert`, {
+    const response = await fetch(`${API_BASE_URL}/api/v1/currency/convert`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ amount, language }),
@@ -54,37 +44,13 @@ function App() {
 
     if (!response.ok) {
       const problem: ValidationProblemDetails = await response.json()
-      const messages = Object.values(problem.errors).flat()
+      const messages = Object.values(problem.errors ?? {}).flat()
       setError(messages.join(' '))
       return
     }
 
     const data: ConvertCurrencyResponse = await response.json()
-    setResult(data.words)
-  }
-
-  function validateAmount(value: string): string | null {
-    const trimmed = value.trim()
-    if (trimmed === '') return 'Amount is required.'
-
-    const [dollarsPart, centsPart, ...rest] = trimmed.split(',')
-    if (rest.length > 0) return "Amount must contain at most one ',' separator."
-
-    const dollarsDigitsOnly = dollarsPart.replace(/\s/g, '')
-    if (!/^\d+$/.test(dollarsDigitsOnly)) {
-      return 'Dollars must contain only digits (and spaces).'
-    }
-    if (Number(dollarsDigitsOnly) > 999_999_999) {
-      return 'The maximum supported amount is 999,999,999 dollars.'
-    }
-
-    if (centsPart !== undefined) {
-      if (!/^\d{1,2}$/.test(centsPart)) {
-        return "Cents must be one or two digits after the ',' (e.g. '25,1' or '25,10')."
-      }
-    }
-
-    return null
+    setResult(data.words ?? '')
   }
 
   return (
@@ -100,7 +66,7 @@ function App() {
             onChange={(event) => setLanguage(event.target.value)}
           >
             {languages.map((option) => (
-              <option key={option.code} value={option.code}>
+              <option key={option.code} value={option.code ?? undefined}>
                 {option.displayName}
               </option>
             ))}
