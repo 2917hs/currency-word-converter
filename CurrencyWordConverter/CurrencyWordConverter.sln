@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyToWordConverter.Core", "CurrencyToWordConverter.Core\CurrencyToWordConverter.Core.csproj", "{CD61DBC8-38A4-481F-9857-84C363C60841}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Swagger.API", "..\Presentation\Swagger.API\Swagger.API.csproj", "{9121EBDA-C07B-445E-9FE5-C9AD003A7B81}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{CD61DBC8-38A4-481F-9857-84C363C60841}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD61DBC8-38A4-481F-9857-84C363C60841}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD61DBC8-38A4-481F-9857-84C363C60841}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9121EBDA-C07B-445E-9FE5-C9AD003A7B81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9121EBDA-C07B-445E-9FE5-C9AD003A7B81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9121EBDA-C07B-445E-9FE5-C9AD003A7B81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9121EBDA-C07B-445E-9FE5-C9AD003A7B81}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

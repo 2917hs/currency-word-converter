@@ -32,4 +32,16 @@ public static class LanguageCodes
             [Language.English] = "English",
             [Language.German] = "Deutsch (German)"
         };
+
+    public static bool TryParse(string? code, out Language language)
+    {
+        if (code is not null && CodeToLanguage.TryGetValue(code, out var found))
+        {
+            language = found;
+            return true;
+        }
+
+        language = default;
+        return false;
+    }
 }
