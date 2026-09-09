@@ -1,7 +1,7 @@
-using CurrencyToWordConverter.Core.BusinessRules.Interfaces;
-using CurrencyToWordConverter.Core.Enumerations;
+using CurrencyConverter.Core.BusinessRules.Interfaces;
+using CurrencyConverter.Core.Enumerations;
 
-namespace CurrencyToWordConverter.Core.BusinessRules.Converters;
+namespace CurrencyConverter.Core.BusinessRules.Converters;
 
 public class CurrencyToWordsConverter : ICurrencyToWordsConverter
 {

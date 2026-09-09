@@ -7,13 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.11" />
         <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="10.2.3" />
         <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.2.3"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\CurrencyToWordConverter.Core\CurrencyToWordConverter.Core.csproj" />
+        <ProjectReference Include="..\..\CurrencyConverter.Core\CurrencyConverter.Core.csproj" />
     </ItemGroup>
 
 </Project>

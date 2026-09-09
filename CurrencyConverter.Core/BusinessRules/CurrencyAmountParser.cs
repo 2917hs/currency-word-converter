@@ -1,7 +1,7 @@
 using System.Globalization;
-using CurrencyToWordConverter.Core.Exceptions;
+using CurrencyConverter.Core.Exceptions;
 
-namespace CurrencyToWordConverter.Core.BusinessRules;
+namespace CurrencyConverter.Core.BusinessRules;
 
 public class CurrencyAmountParser
 {

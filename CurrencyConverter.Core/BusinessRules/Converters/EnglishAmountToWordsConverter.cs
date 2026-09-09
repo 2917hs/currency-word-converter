@@ -1,10 +1,8 @@
-using System.Text;
-using CurrencyToWordConverter.Core.BusinessRules.Interfaces;
-using CurrencyToWordConverter.Core.Enumerations;
+using CurrencyConverter.Core.Enumerations;
 
-namespace CurrencyToWordConverter.Core.BusinessRules.Converters;
+namespace CurrencyConverter.Core.BusinessRules.Converters;
 
-public class EnglishAmountToWordsConverter : IAmountToWordsConverter
+public sealed class EnglishAmountToWordsConverter : AmountToWordsConverterBase
 {
     private static readonly string[] Ones =
     {
@@ -17,27 +15,15 @@ public class EnglishAmountToWordsConverter : IAmountToWordsConverter
         "", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"
     };
 
-    public Language Language { get; } = Language.English;
+    public override Language Language => Language.English;
 
-    public string ConvertAmount(Money money)
-    {
-        var builder = new StringBuilder();
+    protected override string Connector => " and ";
 
-        builder.Append(NumberToWords(money.WholeNumber));
-        builder.Append(' ');
-        builder.Append(money.WholeNumber == 1 ? "dollar" : "dollars");
+    protected override string DollarUnitWord(long value) => value == 1 ? "dollar" : "dollars";
 
-        if (money.Decimal <= 0) return builder.ToString();
+    protected override string CentUnitWord(long value) => value == 1 ? "cent" : "cents";
 
-        builder.Append(" and ");
-        builder.Append(NumberToWords(money.Decimal));
-        builder.Append(' ');
-        builder.Append(money.Decimal == 1 ? "cent" : "cents");
-
-        return builder.ToString();
-    }
-
-    private static string NumberToWords(long value)
+    protected override string NumberToWords(long value)
     {
         if (value == 0) return Ones[0];
 

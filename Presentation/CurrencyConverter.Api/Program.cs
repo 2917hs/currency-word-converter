@@ -1,5 +1,5 @@
-using CurrencyToWordConverter.Core.BusinessRules.Converters;
-using CurrencyToWordConverter.Core.BusinessRules.Interfaces;
+using CurrencyConverter.Core.BusinessRules.Converters;
+using CurrencyConverter.Core.BusinessRules.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 

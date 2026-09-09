@@ -1,10 +1,10 @@
-using CurrencyToWordConverter.Core.BusinessRules.Interfaces;
-using CurrencyToWordConverter.Core.Enumerations;
-using CurrencyToWordConverter.Core.Exceptions;
+using CurrencyConverter.Core.BusinessRules.Interfaces;
+using CurrencyConverter.Core.Enumerations;
+using CurrencyConverter.Core.Exceptions;
 using Microsoft.AspNetCore.Mvc;
-using Swagger.API.DTOs;
+using CurrencyConverter.Api.DTOs;
 
-namespace Swagger.API.Controllers;
+namespace CurrencyConverter.Api.Controllers;
 
 [ApiController]
 [Route("api")]

@@ -1,4 +1,4 @@
-namespace CurrencyToWordConverter.Core.Enumerations;
+namespace CurrencyConverter.Core.Enumerations;
 
 public enum Language
 {

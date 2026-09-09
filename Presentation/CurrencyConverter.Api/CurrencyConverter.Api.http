@@ -1,0 +1,16 @@
+@CurrencyConverter.Api_HostAddress = http://localhost:5295
+
+GET {{CurrencyConverter.Api_HostAddress}}/api/languages
+Accept: application/json
+
+###
+
+POST {{CurrencyConverter.Api_HostAddress}}/api/currency/convert
+Content-Type: application/json
+
+{
+  "amount": "25,1",
+  "language": "en"
+}
+
+###

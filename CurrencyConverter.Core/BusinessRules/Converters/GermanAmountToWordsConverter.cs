@@ -1,84 +1,41 @@
 using System.Text;
-using CurrencyToWordConverter.Core.BusinessRules.Interfaces;
-using CurrencyToWordConverter.Core.Enumerations;
+using CurrencyConverter.Core.Enumerations;
 
-namespace CurrencyToWordConverter.Core.BusinessRules.Converters;
+namespace CurrencyConverter.Core.BusinessRules.Converters;
 
-public class GermanAmountToWordsConverter : IAmountToWordsConverter
+public sealed class GermanAmountToWordsConverter : AmountToWordsConverterBase
 {
     private static readonly Dictionary<int, string> OnesTrailing = new()
     {
-        [0] = "null",
-        [1] = "eins",
-        [2] = "zwei",
-        [3] = "drei",
-        [4] = "vier",
-        [5] = "fünf",
-        [6] = "sechs",
-        [7] = "sieben",
-        [8] = "acht",
-        [9] = "neun",
-        [10] = "zehn",
-        [11] = "elf",
-        [12] = "zwölf",
-        [13] = "dreizehn",
-        [14] = "vierzehn",
-        [15] = "fünfzehn",
-        [16] = "sechzehn",
-        [17] = "siebzehn",
-        [18] = "achtzehn",
-        [19] = "neunzehn"
+        [0] = "null", [1] = "eins", [2] = "zwei", [3] = "drei", [4] = "vier",
+        [5] = "fünf", [6] = "sechs", [7] = "sieben", [8] = "acht", [9] = "neun",
+        [10] = "zehn", [11] = "elf", [12] = "zwölf", [13] = "dreizehn", [14] = "vierzehn",
+        [15] = "fünfzehn", [16] = "sechzehn", [17] = "siebzehn", [18] = "achtzehn", [19] = "neunzehn"
     };
 
     private static readonly Dictionary<int, string> OnesPrefix = new()
     {
-        [1] = "ein",
-        [2] = "zwei",
-        [3] = "drei",
-        [4] = "vier",
-        [5] = "fünf",
-        [6] = "sechs",
-        [7] = "sieben",
-        [8] = "acht",
-        [9] = "neun"
+        [1] = "ein", [2] = "zwei", [3] = "drei", [4] = "vier", [5] = "fünf",
+        [6] = "sechs", [7] = "sieben", [8] = "acht", [9] = "neun"
     };
 
     private static readonly Dictionary<int, string> Tens = new()
     {
-        [2] = "zwanzig",
-        [3] = "dreißig",
-        [4] = "vierzig",
-        [5] = "fünfzig",
-        [6] = "sechzig",
-        [7] = "siebzig",
-        [8] = "achtzig",
-        [9] = "neunzig"
+        [2] = "zwanzig", [3] = "dreißig", [4] = "vierzig", [5] = "fünfzig",
+        [6] = "sechzig", [7] = "siebzig", [8] = "achtzig", [9] = "neunzig"
     };
 
-    public Language Language { get; } = Language.German;
+    public override Language Language => Language.German;
 
-    public string ConvertAmount(Money money)
-    {
-        var builder = new StringBuilder();
+    protected override string Connector => " und ";
 
-        builder.Append(FormatComponent(money.WholeNumber));
-        builder.Append(" Dollar");
+    protected override string DollarUnitWord(long value) => "Dollar";
 
-        if (money.Decimal <= 0) return builder.ToString();
+    protected override string CentUnitWord(long value) => "Cent";
 
-        builder.Append(" und ");
-        builder.Append(FormatComponent(money.Decimal));
-        builder.Append(" Cent");
+    protected override string FormatNumberForUnit(long value) => value == 1 ? "ein" : NumberToWords(value);
 
-        return builder.ToString();
-    }
-
-    private static string FormatComponent(long value)
-    {
-        return value == 1 ? "ein" : NumberToWords(value);
-    }
-
-    private static string NumberToWords(long value)
+    protected override string NumberToWords(long value)
     {
         if (value == 0) return "null";
 

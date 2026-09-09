@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Swagger.API.DTOs;
+namespace CurrencyConverter.Api.DTOs;
 
 public sealed record ConvertCurrencyRequest(
     [Required] string Amount,
