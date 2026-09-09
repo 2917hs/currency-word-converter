@@ -14,6 +14,11 @@ type ConvertCurrencyResponse = {
   words: string
 }
 
+type ValidationProblemDetails = {
+  title: string
+  errors: Record<string, string[]>
+}
+
 function App() {
   const [languages, setLanguages] = useState<LanguageOption[]>([])
   const [language, setLanguage] = useState('en')
@@ -40,7 +45,9 @@ function App() {
     })
 
     if (!response.ok) {
-      setError(`Request failed: ${response.status}`)
+      const problem: ValidationProblemDetails = await response.json()
+      const messages = Object.values(problem.errors).flat()
+      setError(messages.join(' '))
       return
     }
 
