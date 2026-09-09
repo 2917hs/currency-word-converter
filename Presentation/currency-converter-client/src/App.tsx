@@ -25,6 +25,7 @@ function App() {
   const [amount, setAmount] = useState('')
   const [result, setResult] = useState('')
   const [error, setError] = useState('')
+  const [validationError, setValidationError] = useState('')
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/languages`)
@@ -37,6 +38,13 @@ function App() {
     event.preventDefault()
     setError('')
     setResult('')
+
+    const validationMessage = validateAmount(amount)
+    if (validationMessage) {
+      setValidationError(validationMessage)
+      return
+    }
+    setValidationError('')
 
     const response = await fetch(`${API_BASE_URL}/api/currency/convert`, {
       method: 'POST',
@@ -53,6 +61,30 @@ function App() {
 
     const data: ConvertCurrencyResponse = await response.json()
     setResult(data.words)
+  }
+
+  function validateAmount(value: string): string | null {
+    const trimmed = value.trim()
+    if (trimmed === '') return 'Amount is required.'
+
+    const [dollarsPart, centsPart, ...rest] = trimmed.split(',')
+    if (rest.length > 0) return "Amount must contain at most one ',' separator."
+
+    const dollarsDigitsOnly = dollarsPart.replace(/\s/g, '')
+    if (!/^\d+$/.test(dollarsDigitsOnly)) {
+      return 'Dollars must contain only digits (and spaces).'
+    }
+    if (Number(dollarsDigitsOnly) > 999_999_999) {
+      return 'The maximum supported amount is 999,999,999 dollars.'
+    }
+
+    if (centsPart !== undefined) {
+      if (!/^\d{1,2}$/.test(centsPart)) {
+        return "Cents must be one or two digits after the ',' (e.g. '25,1' or '25,10')."
+      }
+    }
+
+    return null
   }
 
   return (
@@ -84,6 +116,7 @@ function App() {
             onChange={(event) => setAmount(event.target.value)}
             placeholder="e.g. 25,10"
           />
+          {validationError && <p style={{ color: 'red' }}>{validationError}</p>}
         </div>
 
         <button type="submit">Convert</button>

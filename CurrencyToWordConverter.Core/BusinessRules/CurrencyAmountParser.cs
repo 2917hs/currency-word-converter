@@ -39,7 +39,7 @@ public class CurrencyAmountParser
 
         if (dollars > Money.MaxWholeNumber)
             throw new CurrencyFormatException(
-                $"The maximum supported amount is {Money.MaxWholeNumber:N0} dollars.");
+                $"The maximum supported amount is {Money.MaxWholeNumber.ToString("N0", CultureInfo.InvariantCulture)} dollars.");
 
         return dollars;
     }
