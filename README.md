@@ -72,4 +72,4 @@ Frontend types (`src/api-types.ts`) are generated from the API, not hand-written
 
 ## AI usage disclosure
 
-Built with AI assistance (Claude Code). Prompt history included per submission requirements.
+Built with AI assistance (Claude Code). Prompt history is recorded in commit messages — `AI:`-prefixed subjects with the literal prompt in the body. See commits `9d12913`, `7fa5c90`, `52fbdca`.
