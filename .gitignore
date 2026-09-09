@@ -1,3 +1,66 @@
+## .NET / Visual Studio / Rider
+
+# Build results
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Oo]ut/
+msbuild.log
+msbuild.err
+msbuild.wrn
+
+# Visual Studio / Rider cache and options
+.vs/
+.idea/
+*.userosscache
+*.sln.docstates
+*.suo
+*.user
+*.userprefs
+*.sln.iml
+
+# NuGet
+*.nupkg
+*.snupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+*.nuget.props
+*.nuget.targets
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Test results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.trx
+*.coverage
+*.coveragexml
+
+# ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# OS files
 .DS_Store
+Thumbs.db
+
+# Others
+*.log
+*.tmp
+*.bak
+*.swp
+*.pidb
+*.svclog
+*.scc
 /Presentation/Swagger.API/obj
-/Presentation/Swagger.API/bin
